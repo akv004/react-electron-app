@@ -1,24 +1,26 @@
-//import base64 from "base-64";
+import React, {FC} from 'react';
 
-// export const Page=()=>{
-//
-//     const name = base64.encode('Test');
-//     return(
-//         <>
-//             <div>{name}</div>
-//             <div>{base64.decode(name)}</div>
-//         </>
-//
-//     )
-// }
+const sendSubmit = async (args: any) => {
+    console.log(args);
+    let result = await window.electron.ipcRenderer.invoke("mysql", args);
+    return result;
+}
 
-export const Page=()=>{
+export const Page: FC = () => {
+    const [out, setOut] = React.useState<any>({"a":"1"});
+    //const name = base64.encode('Test');
+    const sendMsg = async () => {
+        sendSubmit({"port": "333", "server": "8080"}).then((value) => {
+                setOut(value)
+            }
+        )
+    }
+    return (
+        <div className="page-container">
+            <h1>Page.tsx</h1>
+            <button onClick={sendMsg}>Send MSG???</button>
+            <div>{JSON.stringify(out)}</div>
+        </div>
 
-  //const name = base64.encode('Test');
-  return(
-    <>
-    <h1>Hello</h1>
-    </>
-
-  )
+    )
 }

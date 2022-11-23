@@ -14,6 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
+import {getPages} from "./service/MyDAO";
 
 class AppUpdater {
   constructor() {
@@ -25,11 +26,31 @@ class AppUpdater {
 
 let mainWindow: BrowserWindow | null = null;
 
+/**
+ * The ipcMain module is an Event Emitter.
+ * When used in the main process,
+ * it handles asynchronous and synchronous messages sent from a renderer process (web page).
+ * Messages sent from a renderer will be emitted to this module.
+ */
+
 ipcMain.on('ipc-example', async (event, arg) => {
   const msgTemplate = (pingPong: string) => `IPC test: ${pingPong}`;
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
 });
+
+
+ipcMain.handle('mysql', async (event, ...args) => {
+  console.log("args:"+ JSON.stringify(args) +" event"+ event)
+  await getPages();
+  const result = {
+    args,
+    out: "chaman"
+  }
+  return result
+})
+
+
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
