@@ -14,7 +14,9 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import {getPages} from "./service/MyDAO";
+import { createConnection } from "typeorm";
+import {Users} from "./entities/Users";
+import {getUsers} from "./service/MyDAO";
 
 class AppUpdater {
   constructor() {
@@ -42,14 +44,13 @@ ipcMain.on('ipc-example', async (event, arg) => {
 
 ipcMain.handle('mysql', async (event, ...args) => {
   console.log("args:"+ JSON.stringify(args) +" event"+ event)
-  await getPages();
+  const user = await getUsers();
   const result = {
     args,
-    out: "chaman"
+    out: user
   }
   return result
 })
-
 
 
 if (process.env.NODE_ENV === 'production') {
@@ -81,6 +82,7 @@ const createWindow = async () => {
   if (isDebug) {
     await installExtensions();
   }
+
 
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
@@ -132,6 +134,17 @@ const createWindow = async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+
+  //setup ORM mysql
+  await createConnection({
+    type: "mysql",
+    database: "db",
+    username: "user",
+    password: "password",
+    logging: true,
+    synchronize: false,
+    entities: [Users],
+  });
 };
 
 /**
