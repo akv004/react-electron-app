@@ -3,7 +3,6 @@
   "version": "4.6.0",
   "description": "my-react-electron-app",
   "license": "MIT",
-
   "main": "./dist/main/main.js",
   "scripts": {
     "electron-rebuild": "node -r ts-node/register ../../.erb/scripts/electron-rebuild.js",

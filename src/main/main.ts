@@ -14,9 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import { createConnection } from "typeorm";
-import {Users} from "./entities/Users";
-import {getUsers} from "./service/MyDAO";
+import { DataSource } from 'nedb';
 
 class AppUpdater {
   constructor() {
@@ -42,15 +40,15 @@ ipcMain.on('ipc-example', async (event, arg) => {
 });
 
 
-ipcMain.handle('mysql', async (event, ...args) => {
-  console.log("args:"+ JSON.stringify(args) +" event"+ event)
-  const user = await getUsers();
-  const result = {
-    args,
-    out: user
-  }
-  return result
-})
+// ipcMain.handle('mysql', async (event, ...args) => {
+//   console.log("args:"+ JSON.stringify(args) +" event"+ event)
+//   const user = await getUsers();
+//   const result = {
+//     args,
+//     out: user
+//   }
+//   return result
+// })
 
 
 if (process.env.NODE_ENV === 'production') {
@@ -135,17 +133,17 @@ const createWindow = async () => {
   // eslint-disable-next-line
   new AppUpdater();
 
-  //setup ORM mysql
-  await createConnection({
-    type: "mysql",
-    database: "db",
-    username: "user",
-    password: "password",
-    logging: true,
-    synchronize: false,
-    entities: [Users],
-  });
-};
+//   //setup ORM mysql
+//   await createConnection({
+//     type: "mysql",
+//     database: "db",
+//     username: "user",
+//     password: "password",
+//     logging: true,
+//     synchronize: false,
+//     entities: [Users],
+//   });
+// };
 
 /**
  * Add event listeners...

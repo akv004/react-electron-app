@@ -88,12 +88,11 @@
     }
   },
   "dependencies": {
-    "@types/mysql": "^2.15.21",
     "base-64": "^1.0.0",
     "electron-debug": "^3.2.0",
     "electron-log": "^4.4.7",
     "electron-updater": "^5.0.3",
-    "mysql2": "^2.3.3",
+    "nedb": "^1.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
@@ -106,6 +105,7 @@
     "@testing-library/react": "^13.2.0",
     "@types/base-64": "^1.0.0",
     "@types/jest": "^27.5.1",
+    "@types/nedb": "^1.8.16",
     "@types/node": "17.0.33",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
