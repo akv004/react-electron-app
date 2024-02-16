@@ -95,8 +95,7 @@
     "nedb": "^1.8.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.3.0",
-    "typeorm": "^0.3.10"
+    "react-router-dom": "^6.3.0"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.6",
