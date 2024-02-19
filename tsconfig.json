@@ -12,6 +12,9 @@
     "pretty": true,
     "sourceMap": true,
     "baseUrl": "./src",
+    "paths": {
+      "*": ["src/*"]
+    },
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
@@ -24,5 +27,8 @@
     "outDir": "release/app/dist",
     "emitDecoratorMetadata": true
   },
-  "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"]
+  "exclude": ["test", "release/build", "release/app/dist", ".erb/dll"],
+  "include": [
+    "src/**/*"
+  ]
 }

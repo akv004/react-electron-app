@@ -14,16 +14,32 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-// @ts-ignore
-import { DataStore } from 'nedb';
+import { setupUrlsManagementIPC } from './service/ipcHandlers/ipcHandlers';
 
 
 // Initialize NeDB database
 // @ts-ignore
-const db = new DataSource({
-  filename: path.join(app.getPath('userData'), 'db.db'),
-  autoload: true
-});
+
+console.log(app.getPath('userData'))
+// const db = new DataSource({
+//   filename: path.join(app.getPath('userData'), 'db.db'),
+//   autoload: true
+// });
+
+// var doc = { hello: 'world'
+//   , n: 5
+//   , today: new Date()
+//   , nedbIsAwesome: true
+//   , notthere: null
+//   , notToBeSaved: undefined  // Will not be saved
+//   , fruits: [ 'apple', 'orange', 'pear' ]
+//   , infos: { name: 'nedb' }
+// };
+//
+// db.insert(doc, function (err, newDoc) {   // Callback is optional
+//   // newDoc is the newly inserted document, including its _id
+//   // newDoc has no key called notToBeSaved since its value was undefined
+// });
 
 class AppUpdater {
   constructor() {
@@ -40,18 +56,6 @@ ipcMain.on('ipc-example', async (event, arg) => {
   console.log(msgTemplate(arg));
   event.reply('ipc-example', msgTemplate('pong'));
 });
-
-
-// ipcMain.handle('mysql', async (event, ...args) => {
-//   console.log("args:"+ JSON.stringify(args) +" event"+ event)
-//   const user = await getUsers();
-//   const result = {
-//     args,
-//     out: user
-//   }
-//   return result
-// })
-
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -134,40 +138,31 @@ const createWindow = async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
+};
 
-//   //setup ORM mysql
-//   await createConnection({
-//     type: "mysql",
-//     database: "db",
-//     username: "user",
-//     password: "password",
-//     logging: true,
-//     synchronize: false,
-//     entities: [Users],
-//   });
-// };
+/**
+ * Add event listeners...
+ */
 
-  /**
-   * Add event listeners...
-   */
+app.on('window-all-closed', () => {
+  // Respect the OSX convention of having the application in memory even
+  // after all windows have been closed
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
 
-  app.on('window-all-closed', () => {
-    // Respect the OSX convention of having the application in memory even
-    // after all windows have been closed
-    if (process.platform !== 'darwin') {
-      app.quit();
-    }
-  });
+app
+  .whenReady()
+  .then(() => {
+    setupUrlsManagementIPC();
+    createWindow();
+    //initialize the IPC handlers
 
-  app
-    .whenReady()
-    .then(() => {
-      createWindow();
-      app.on('activate', () => {
-        // On macOS it's common to re-create a window in the app when the
-        // dock icon is clicked and there are no other windows open.
-        if (mainWindow === null) createWindow();
-      });
-    })
-    .catch(console.log);
-}
+    app.on('activate', () => {
+      // On macOS it's common to re-create a window in the app when the
+      // dock icon is clicked and there are no other windows open.
+      if (mainWindow === null) createWindow();
+    });
+  })
+  .catch(console.log);

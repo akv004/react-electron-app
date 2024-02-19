@@ -2,7 +2,7 @@ import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 import {Page} from "./component/Page";
 
-const Hello = () => {
+const Main = () => {
   return (
     <div>
       <h1>react-electron-app</h1>
@@ -15,7 +15,7 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Hello />} />
+        <Route path="/" element={<Main />} />
       </Routes>
     </Router>
   );
