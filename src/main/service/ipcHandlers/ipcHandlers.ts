@@ -1,4 +1,4 @@
-import { app, ipcMain } from 'electron';
+import { app, ipcMain, shell } from 'electron';
 import Datastore from 'nedb';
 import path from 'path';
 import { RepoLink } from '../../../common/interfaces/RepoLink';
@@ -13,6 +13,19 @@ const nedb = new Datastore({
 
 function setupUrlsManagementIPC() {
   console.log("Setting up URLs Management IPC");
+
+
+
+  ipcMain.on('open-external', async (event, urlArray) => {
+    // Extract the first element of the array to get the URL string
+    const url = urlArray[0];
+    try {
+      // Now url is a string, so this should work
+      await shell.openExternal(url);
+    } catch (error) {
+      console.error(`Failed to open URL: ${error}`);
+    }
+  });
 
 
   // Example IPC handler for adding a new RepoLink

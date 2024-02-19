@@ -5,7 +5,7 @@ import {Page} from "./component/Page";
 const Main = () => {
   return (
     <div>
-      <h1>react-electron-app</h1>
+      <div>react-electron-app</div>
         <Page/>
     </div>
   );

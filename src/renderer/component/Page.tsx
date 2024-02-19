@@ -5,7 +5,7 @@ export const Page = () => {
 
     return (
         <div className="page-container">
-            <h1>Page.tsx</h1>
+            <div>Page.tsx</div>
           <UrlFetcher/>
         </div>
 
